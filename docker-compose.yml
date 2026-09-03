@@ -4,6 +4,9 @@ services:
     container_name: claude-max-api-proxy
     restart: unless-stopped
 
+    environment:
+      - HOST=0.0.0.0
+
     ports:
       - "3456:3456"
 

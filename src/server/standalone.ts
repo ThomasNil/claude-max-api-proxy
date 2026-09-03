@@ -24,6 +24,10 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  // Bind host: defaults to loopback-only for local use, override with HOST=0.0.0.0
+  // when running in Docker so the port mapping / edge network can reach it.
+  const host = process.env.HOST || "127.0.0.1";
+
   // Verify Claude CLI
   console.log("Checking Claude CLI...");
   const cliCheck = await verifyClaude();
@@ -45,7 +49,7 @@ async function main(): Promise<void> {
 
   // Start server
   try {
-    await startServer({ port });
+    await startServer({ port, host });
     console.log("\nServer ready. Test with:");
     console.log(`  curl -X POST http://localhost:${port}/v1/chat/completions \\`);
     console.log(`    -H "Content-Type: application/json" \\`);
