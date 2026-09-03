@@ -23,6 +23,7 @@ export interface OpenAIChatRequest {
   frequency_penalty?: number;
   presence_penalty?: number;
   user?: string; // Used for session mapping
+  reasoning_effort?: string; // Forwarded to `claude --effort` (low/medium/high/xhigh/max)
 }
 
 export interface OpenAIToolCall {

@@ -345,6 +345,7 @@ async function handleStreamingResponse(
       model: cliInput.model,
       sessionId: cliInput.sessionId,
       resume: sessionCtx.resume,
+      effort: cliInput.effort,
     }).catch((err) => {
       console.error("[Streaming] Subprocess start error:", err);
       reject(err);

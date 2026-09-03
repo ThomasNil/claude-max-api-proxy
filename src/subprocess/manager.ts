@@ -34,6 +34,8 @@ export interface SubprocessOptions {
   resume?: boolean;
   cwd?: string;
   timeout?: number;
+  /** Passed through as `claude --effort <level>`. Omitted -> CLI's own default. */
+  effort?: string;
 }
 
 export interface SubprocessEvents {
@@ -306,6 +308,10 @@ export class ClaudeSubprocess extends EventEmitter {
       OPENCLAW_TOOL_MAPPING_PROMPT,
       // Prompt is passed via stdin (avoids E2BIG on large inputs)
     ];
+
+    if (options.effort) {
+      args.push("--effort", options.effort);
+    }
 
     if (options.sessionId && options.resume) {
       // Continue a previously persisted session — avoids replaying full history

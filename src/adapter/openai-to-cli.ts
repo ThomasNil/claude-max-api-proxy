@@ -10,6 +10,29 @@ export interface CliInput {
   prompt: string;
   model: ClaudeModel;
   sessionId?: string;
+  effort?: ClaudeEffort;
+}
+
+export type ClaudeEffort = "low" | "medium" | "high" | "xhigh" | "max";
+
+const VALID_EFFORTS: ReadonlySet<string> = new Set([
+  "low",
+  "medium",
+  "high",
+  "xhigh",
+  "max",
+]);
+
+/**
+ * Validate a requested effort level against what `claude --effort` accepts.
+ * Silently drops anything else so an unrecognized value (e.g. "minimal",
+ * a typo, a different provider's naming) falls through to the CLI's own
+ * default instead of erroring the whole request.
+ */
+function extractEffort(effort: unknown): ClaudeEffort | undefined {
+  return typeof effort === "string" && VALID_EFFORTS.has(effort)
+    ? (effort as ClaudeEffort)
+    : undefined;
 }
 
 const MODEL_MAP: Record<string, ClaudeModel> = {
@@ -142,6 +165,7 @@ export function openaiToCli(request: OpenAIChatRequest): CliInput {
     prompt: messagesToPrompt(request.messages),
     model: extractModel(request.model),
     sessionId: request.user, // Use OpenAI's user field for session mapping
+    effort: extractEffort(request.reasoning_effort),
   };
 }
 
@@ -165,5 +189,6 @@ export function openaiToCliDelta(
     prompt: messagesToPrompt(newMessages.length ? newMessages : request.messages),
     model: extractModel(request.model),
     sessionId: request.user,
+    effort: extractEffort(request.reasoning_effort),
   };
 }
