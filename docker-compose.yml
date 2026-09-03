@@ -11,7 +11,9 @@ services:
       - "3456:3456"
 
     volumes:
-      - claude-config:/root/.claude
+      # Whole home dir, not just ~/.claude/ - the CLI's main config file
+      # (~/.claude.json) lives one level up from that directory.
+      - claude-config:/home/claudeuser
 
     networks:
       - edge
