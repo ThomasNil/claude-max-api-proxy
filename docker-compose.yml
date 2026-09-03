@@ -1,0 +1,21 @@
+services:
+  claude-max-api-proxy:
+    build: .
+    container_name: claude-max-api-proxy
+    restart: unless-stopped
+
+    ports:
+      - "3456:3456"
+
+    volumes:
+      - claude-config:/root/.claude
+
+    networks:
+      - edge
+
+networks:
+  edge:
+    external: true
+
+volumes:
+  claude-config:
