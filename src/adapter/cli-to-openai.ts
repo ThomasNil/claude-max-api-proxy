@@ -111,6 +111,7 @@ export function cliResultToOpenai(
  */
 function normalizeModelName(model: string | undefined): string {
   if (!model) return "claude-sonnet-4";
+  if (/^claude-(opus|sonnet)-5-5/.test(model)) return model.match(/^claude-(opus|sonnet)-5-5/)![0];
   if (model.includes("opus")) return "claude-opus-4";
   if (model.includes("sonnet")) return "claude-sonnet-4";
   if (model.includes("haiku")) return "claude-haiku-4";

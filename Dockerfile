@@ -1,6 +1,9 @@
 FROM node:22-bookworm
 
-RUN npm install -g @anthropic-ai/claude-code
+# Pinned so a version bump busts the layer cache (unpinned, a cached layer
+# silently keeps an old CLI that rejects newer model ids).
+ARG CLAUDE_CODE_VERSION=2.1.285
+RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
 # Claude CLI refuses --dangerously-skip-permissions when running as root/sudo,
 # and this proxy always passes that flag - so the container must run as a

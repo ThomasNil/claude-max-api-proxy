@@ -4,7 +4,9 @@
 
 import type { OpenAIChatRequest, OpenAIContentBlock } from "../types/openai.js";
 
-export type ClaudeModel = "opus" | "sonnet" | "haiku";
+// CLI aliases, or a full model id passed through verbatim when the alias
+// would resolve to an older model.
+export type ClaudeModel = "opus" | "sonnet" | "haiku" | "claude-opus-5-5" | "claude-sonnet-5-5";
 
 export interface CliInput {
   prompt: string;
@@ -45,6 +47,8 @@ const MODEL_MAP: Record<string, ClaudeModel> = {
   "claude-sonnet-4-6": "sonnet",
   "claude-sonnet-5": "sonnet",
   "claude-opus-5": "opus",
+  "claude-sonnet-5-5": "claude-sonnet-5-5",
+  "claude-opus-5-5": "claude-opus-5-5",
   "claude-haiku-4": "haiku",
   "claude-haiku-4-5": "haiku",
   // Bare aliases
