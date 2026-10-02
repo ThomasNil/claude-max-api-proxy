@@ -22,6 +22,17 @@ function createApp(): Express {
   const app = express();
 
   // Middleware: use raw body parser + manual JSON parse for better error diagnostics
+  // 413 istället för socket-reset vid för stora bodies (GitHub-issue kaitranntt/ccs)
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const len = req.headers["content-length"];
+    if (req.method === "POST" && len && parseInt(len, 10) > 10 * 1024 * 1024) {
+      res.status(413).json({
+        error: { message: "Request body too large (max 10 MB)", type: "invalid_request_error" }
+      });
+      return;
+    }
+    next();
+  });
   app.use(express.raw({ type: "application/json", limit: "10mb" }));
   app.use((req: Request, _res: Response, next: NextFunction) => {
     if (req.body && Buffer.isBuffer(req.body) && req.body.length > 0) {

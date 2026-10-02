@@ -2,7 +2,7 @@ FROM node:22-bookworm
 
 # Pinned so a version bump busts the layer cache (unpinned, a cached layer
 # silently keeps an old CLI that rejects newer model ids).
-ARG CLAUDE_CODE_VERSION=2.1.285
+ARG CLAUDE_CODE_VERSION=2.1.287
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
 # Claude CLI refuses --dangerously-skip-permissions when running as root/sudo,
